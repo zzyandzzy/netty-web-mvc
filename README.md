@@ -1,0 +1,49 @@
+# 基于Netty的Web Mvc
+
+实现了IoC容器，依赖注入和Spring的一些注解。
+
+# 功能
+
+- 自定义RequestMapping
+- 依赖注入
+
+# 使用
+
+- 配置文件
+
+需要指定包扫描路径**http.scanPackage**
+
+```properties
+http.scanPackage=xyz.zzyitj.netty.test
+http.host=localhost
+http.port=8080
+http.ssl=false
+```
+
+- Controller
+
+```java
+@Controller
+@RequestMapping(value = {"/demo", "/"})
+public class HelloController {
+    @Autowired
+    private HelloService helloService;
+
+    @RequestMapping(value = "/hello",
+            method = RequestMethod.GET,
+            produces = {MediaType.TEXT_PLAIN_VALUE, MediaType.CHARSET_UTF8_VALUE})
+    public String sayHello(HttpRequest request) {
+        return helloService.hello("Intent");
+    }
+}
+```
+
+- 启动
+```java
+public class HttpServerTest {
+    public static void main(String[] args) throws Exception {
+        new HttpServer().start();
+    }
+}
+```
+更多请看: [demo](./test/src/main/java/xyz/zzyitj/netty/test/HttpServerTest.java)
